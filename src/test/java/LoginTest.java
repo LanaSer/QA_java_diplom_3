@@ -3,12 +3,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import io.qameta.allure.junit4.DisplayName;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import pageObject.*;
+import pageobject.ForgotPage;
+import pageobject.HomePage;
+import pageobject.LoginPage;
+import pageobject.RegisterPage;
+import pageobject.ProfilePage;
 
 import java.time.Duration;
 
@@ -16,7 +17,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class LoginTest {
-    WebDriver driver;
+    private WebDriver driver;
     HomePage objHomePage;
     RegisterPage objRegisterPage;
     LoginPage objloginPage;
@@ -28,6 +29,7 @@ public class LoginTest {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.get("https://stellarburgers.nomoreparties.site/");
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         objHomePage = new HomePage(driver);
         objloginPage = new LoginPage(driver);
         objRegisterPage = new RegisterPage(driver);
@@ -45,9 +47,8 @@ public class LoginTest {
     public void loginHomePageTest() {
         objHomePage.clickLogInYourAccountButton();
         objloginPage.login("teste@example.com", "123422");
-
         objHomePage.clickPersonalAccountButton();
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div/nav/ul/li[1]/a")));
+        objProfilePage.expectationAccount();
         String newAccountLinkText = objProfilePage.getAccountLinkText();
         assertThat(newAccountLinkText, is("Профиль"));
     }
@@ -55,12 +56,12 @@ public class LoginTest {
     @Test
     @DisplayName("вход через кнопку «Личный кабинет»,")
     public void personalAccountButtonHomePageTest() {
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.elementToBeClickable(By.xpath("//p[contains(text(),'Личный')]")));
+        objHomePage.expectationPersonalAccount();
         objHomePage.clickPersonalAccountButton();
         objloginPage.login("teste@example.com", "123422");
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.elementToBeClickable(By.xpath("//p[contains(text(),'Личный')]")));
+        objHomePage.expectationPersonalAccount();
         objHomePage.clickPersonalAccountButton();
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div/nav/ul/li[1]/a")));
+        objProfilePage.expectationAccount();
         String newAccountLinkText = objProfilePage.getAccountLinkText();
         assertThat(newAccountLinkText, is("Профиль"));
     }
@@ -68,14 +69,14 @@ public class LoginTest {
     @Test
     @DisplayName("вход через кнопку в форме регистрации")
     public void registerHomeLoginTest() {
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.elementToBeClickable(By.xpath("//p[contains(text(),'Личный')]")));
+        objHomePage.expectationPersonalAccount();
         objHomePage.clickLogInYourAccountButton();
         objloginPage.clickRegisterButton();
         objRegisterPage.clickLoginButton();
         objloginPage.login("teste@example.com", "123422");
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.elementToBeClickable(By.xpath("//p[contains(text(),'Личный')]")));
+        objHomePage.expectationPersonalAccount();
         objHomePage.clickPersonalAccountButton();
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div/nav/ul/li[1]/a")));
+        objProfilePage.expectationAccount();
         String newAccountLinkText = objProfilePage.getAccountLinkText();
         assertThat(newAccountLinkText, is("Профиль"));
     }
@@ -83,14 +84,14 @@ public class LoginTest {
     @Test
     @DisplayName("вход через кнопку в форме восстановления пароля")
     public void forgotPasswordTest() {
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.elementToBeClickable(By.xpath("//p[contains(text(),'Личный')]")));
+        objHomePage.expectationPersonalAccount();
         objHomePage.clickPersonalAccountButton();
         objloginPage.clickForgotPasswordButton();
         objForgotPage.clickLoginEnter();
         objloginPage.login("teste@example.com", "123422");
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.elementToBeClickable(By.xpath("//p[contains(text(),'Личный')]")));
+        objHomePage.expectationPersonalAccount();
         objHomePage.clickPersonalAccountButton();
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div/nav/ul/li[1]/a")));
+        objProfilePage.expectationAccount();
         String newAccountLinkText = objProfilePage.getAccountLinkText();
         assertThat(newAccountLinkText, is("Профиль"));
     }

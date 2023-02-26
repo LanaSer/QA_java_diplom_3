@@ -5,13 +5,13 @@ import org.junit.Test;
 import io.qameta.allure.junit4.DisplayName;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import pageObject.HomePage;
+import pageobject.HomePage;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class HomePageTest {
-    WebDriver driver;
+    private WebDriver driver;
     HomePage objHomePage;
 
     @Before

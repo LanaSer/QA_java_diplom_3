@@ -3,20 +3,18 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import io.qameta.allure.junit4.DisplayName;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import pageObject.*;
-
+import pageobject.HomePage;
+import pageobject.LoginPage;
+import pageobject.ProfilePage;;
 import java.time.Duration;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ProfileTest {
-    WebDriver driver;
+    private WebDriver driver;
     HomePage objHomePage;
     LoginPage objloginPage;
     ProfilePage objProfilePage;
@@ -26,6 +24,7 @@ public class ProfileTest {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.get("https://stellarburgers.nomoreparties.site/");
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         objHomePage = new HomePage(driver);
         objHomePage.clickLogInYourAccountButton();
         objloginPage = new LoginPage(driver);
@@ -42,8 +41,9 @@ public class ProfileTest {
     @Test
     @DisplayName("Выход из аккаунта")
     public void exitLoginTest() {
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[text()='Выход']")));
+        objProfilePage.expectationEscButton();
         objProfilePage.clickExitButton();
+        objloginPage.expectationEnterText();
         String newGetEnterText = objloginPage.getEnterText();
         assertThat(newGetEnterText, is("Вход"));
     }
@@ -51,7 +51,7 @@ public class ProfileTest {
     @Test
     @DisplayName("Переход из личного кабинета в конструктор ")
     public void transitionConstructorTest() {
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(By.className("AppHeader_header__link__3D_hX")));
+        objProfilePage.expectationDesignerButton();
         objProfilePage.clickDesignerButton();
         String newDesignerText = objHomePage.getDesignerText();
         assertThat(newDesignerText, is("Соберите бургер"));
@@ -60,11 +60,9 @@ public class ProfileTest {
     @Test
     @DisplayName("Переход из личного кабинета  по Stellar Burgers в конструктор ")
     public void stellarBurgersTest() {
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(By.className("AppHeader_header__logo__2D0X2")));
+        objProfilePage.expectationStellarBurgersButton();
         objProfilePage.clickDesignerButton();
         String newDesignerText = objHomePage.getDesignerText();
         assertThat(newDesignerText, is("Соберите бургер"));
     }
-
-
 }

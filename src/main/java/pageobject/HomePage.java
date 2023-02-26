@@ -1,57 +1,80 @@
-package pageObject;
+package pageobject;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class HomePage {
-    private final By personalAccountButton = By.xpath("//nav/a/p");
+    private final By personalAccountButton = By.xpath("//p[contains(text(),'Личный')]");
     private final By logInYourAccountButton = By.xpath("//button[contains(text(),'Войти в аккаунт')]");
-    private final By orderFeedButton = By.xpath("//nav/ul/li[2]/a/p");
+    private final By orderFeedButton = By.xpath("//p[contains(text(),'Лента')]");
 
-    private final By designerButton = By.xpath("//nav/ul/li[1]/a");
-    private final By breadButton = By.xpath("//section[1]/div[1]/div[1]");
-    private final By sauceButton = By.xpath("//section[1]/div[1]/div[2]");
-    private final By fillingButton = By.xpath("//section[1]/div[1]/div[3]");
+    private final By designerButton = By.xpath("//*[text()='Конструктор']");
+    private final By breadButton = By.xpath("//span[contains(text(),'Булки')]");
+    private final By sauceButton = By.xpath("//span[contains(text(),'Соус')]");
+    private final By fillingButton = By.xpath("//span[contains(text(),'Начинки')]");
     private final By designerText =By.xpath("//*[text()='Соберите бургер']");
-    private final By breadText = By.xpath("//section[1]/div[2]/h2[1]");
-    private final By sauceText = By.xpath("//section[1]/div[2]/h2[2]");
-    private final By fillingText = By.xpath("//section[1]/div[2]/h2[3]");
+    private final By breadText = By.xpath("//h2[contains(text(),'Булки')]");
+    private final By sauceText = By.xpath("//h2[contains(text(),'Соусы')]");
+    private final By fillingText = By.xpath("//h2[contains(text(),'Начинки')]");
 
     private final WebDriver driver;
     public HomePage(WebDriver driver) {
         this.driver = driver;
     }
-    public void clickPersonalAccountButton(){// метод для кнопки "Личный кабинет"
+    @Step("Нажимаем кнопку  Личный кабинет")
+    public void clickPersonalAccountButton(){
         driver.findElement(personalAccountButton).click();
     }
-    public void clickLogInYourAccountButton(){ // метод для кнопки "Войти в личный кабинет"
+    @Step("Нажимаем кнопку  Войти в личный кабинет")
+    public void clickLogInYourAccountButton(){
         driver.findElement(logInYourAccountButton).click();
     }
-    public void clickOrderFeedButton(){// метод для кнопки "Лента заказов"
+    @Step("Нажимаем кнопку 'Лента заказов'")
+    public void clickOrderFeedButton(){
         driver.findElement(orderFeedButton).click();
     }
+    @Step("Нажимаем кнопку  конструктор")
     public void clickDesignerButton(){
         driver.findElement(designerButton).click();
-    }  public void clickBreadButton(){// метод для кнопки "булка"
+    }
+    @Step("Нажимаем кнопку 'Булка'")
+    public void clickBreadButton(){
         driver.findElement(breadButton).click();
     }
-    public void clickSauceButton(){ // метод для кнопки "Соус"
+    @Step("Нажимаем кнопку 'Соус'")
+    public void clickSauceButton(){
         driver.findElement(sauceButton).click();
     }
-    public void clickFillingButton(){ // метод для кнопки "Начинка"
+    @Step("Нажимаем кнопку 'Начинка'")
+    public void clickFillingButton(){
         driver.findElement(fillingButton).click();
     }
-
+    @Step("Вытаскиваем текст 'Соберите бургер'")
     public String getDesignerText(){
         return driver.findElement(designerText).getText();
     }
-    public String getBreadText(){ //метод для вытаскивания текста  "Булки"
+    @Step("Вытаскиваем текст 'Булки'")
+    public String getBreadText(){
         return driver.findElement(breadText).getText();
     }
-    public String getSauceText(){ //метод для вытаскивания текста  "Соусы"
+    @Step("Вытаскиваем текст 'Соусы'")
+    public String getSauceText(){
         return driver.findElement(sauceText).getText();
     }
-    public String getFillingText(){ //метод для вытаскивания текста  "Начинки"
+
+    @Step("Вытаскиваем текст 'Начинки'")
+    public String getFillingText(){
         return driver.findElement(fillingText).getText();
     }
+
+    @Step("Ожидание кнопки 'Личный Кабинет'")
+    public void expectationPersonalAccount(){
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.elementToBeClickable(personalAccountButton));
+    }
+
 }
